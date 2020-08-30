@@ -1,0 +1,29 @@
+type Question {
+    id: ID!
+    title: String!
+#    createdAt: Time!
+#    updatedAt: Time!
+}
+
+input QuestionInput {
+    title: String!,
+    options: [QuestionOptionInput!]!
+}
+
+type Mutation {
+    CreateQuestion(question: QuestionInput!): QuestionResponse
+    UpdateQuestion(id: ID!, question: QuestionInput!): QuestionResponse
+    DeleteQuestion(id: ID!): QuestionResponse
+}
+
+type Query {
+    GetOneQuestion(id: ID!): QuestionResponse
+    GetAllQuestions: QuestionResponse
+}
+
+type QuestionResponse {
+    message: String!
+    status: Int!
+    data: Question
+    dataList: [Question]
+}

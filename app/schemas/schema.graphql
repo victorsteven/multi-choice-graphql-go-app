@@ -1,0 +1,13 @@
+# GraphQL schema example
+#
+# https://gqlgen.com/getting-started/
+
+scalar Time
+
+scalar Any
+
+#type Response {
+#    message: String!
+#    status: Int!
+#    data: Any
+#}
