@@ -2,8 +2,8 @@ type Question {
     id: ID!
     title: String!
     questionOption: [QuestionOption]
-#    createdAt: Time!
-#    updatedAt: Time!
+    createdAt: Time!
+    updatedAt: Time!
 }
 
 input QuestionInput {

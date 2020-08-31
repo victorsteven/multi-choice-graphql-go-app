@@ -42,26 +42,8 @@ autobind:
 # The first line in each type will be used as defaults for resolver arguments and
 # modelgen, the others will be allowed when binding to fields. Configure them to
 # your liking
-#models:
-#  ID:
-#    model:
-#      - github.com/99designs/gqlgen/graphql.ID
-#      - github.com/99designs/gqlgen/graphql.Int
-#      - github.com/99designs/gqlgen/graphql.Int64
-#      - github.com/99designs/gqlgen/graphql.Int32
-#  Int:
-#    model:
-#      - github.com/99designs/gqlgen/graphql.Int
-#      - github.com/99designs/gqlgen/graphql.Int64
-#      - github.com/99designs/gqlgen/graphql.Int32
 
 models:
-#  Question:
-#    model: multi-choice/app/models.Question
-#  QuestionOptions:
-#    model: multi-choice/app/models.QuestionOptions
-#  Answer:
-#    model: multi-choice/app/models.Answer
   ID:
     model:
       - github.com/99designs/gqlgen/graphql.ID

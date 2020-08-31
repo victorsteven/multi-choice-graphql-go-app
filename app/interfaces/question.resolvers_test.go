@@ -12,27 +12,25 @@ import (
 	"testing"
 )
 
+type fakeQuestionService struct{}
 
-type fakeQuestionService struct {}
-
-type fakeQuestionOptionService struct {}
+type fakeQuestionOptionService struct{}
 
 var fakeQuestion question.QuesService = &fakeQuestionService{} //this is where the real implementation is swap with our fake implementation
 
 var fakeQuestionOption question_option.OptService = &fakeQuestionOptionService{} //this is where the real implementation is swap with our fake implementation
 
-
 func TestCreateQuestion_Success(t *testing.T) {
 
 	var srv = client.New(handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &interfaces.Resolver{
-		QuestionService: fakeQuestion, //this is swap with the real interface
+		QuestionService:       fakeQuestion,       //this is swap with the real interface
 		QuestionOptionService: fakeQuestionOption, //this is swap with the real interface
 	}})))
 
 	//We dont call the domain method, we swap it with this
 	CreateQuestionFn = func(question *models.Question) (*models.Question, error) {
 		return &models.Question{
-			ID: "1",
+			ID:    "1",
 			Title: "Question title",
 		}, nil
 	}
@@ -40,18 +38,18 @@ func TestCreateQuestion_Success(t *testing.T) {
 	//also the mock on the question option:
 	CreateQuestionOptionFn = func(question *models.QuestionOption) (*models.QuestionOption, error) {
 		return &models.QuestionOption{
-			ID: "1",
-			Title: "Option 1",
-			Position: 1,
+			ID:        "1",
+			Title:     "Option 1",
+			Position:  1,
 			IsCorrect: false,
 		}, nil
 	}
 
 	var resp struct {
 		CreateQuestion struct {
-			Message     string
-			Status      int
-			Data       models.Question
+			Message string
+			Status  int
+			Data    models.Question
 		}
 	}
 
@@ -63,31 +61,30 @@ func TestCreateQuestion_Success(t *testing.T) {
 	assert.Equal(t, "1", resp.CreateQuestion.Data.ID)
 }
 
-
 func TestUpdateQuestion_Success(t *testing.T) {
 
 	var srv = client.New(handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &interfaces.Resolver{
-		QuestionService: fakeQuestion, //this is swap with the real interface
+		QuestionService:       fakeQuestion,       //this is swap with the real interface
 		QuestionOptionService: fakeQuestionOption, //this is swap with the real interface
 	}})))
 
 	//We dont call the domain method, we swap it with this
 	GetQuestionByIDFn = func(id string) (*models.Question, error) {
 		return &models.Question{
-			ID: "1",
+			ID:    "1",
 			Title: "Question title",
 		}, nil
 	}
 
 	//We dont call the domain method, we swap it with this
-	DeleteQuestionOptionByQuestionIDFn = func(questionId string)  error {
+	DeleteQuestionOptionByQuestionIDFn = func(questionId string) error {
 		return nil
 	}
 
 	//We dont call the domain method, we swap it with this
 	UpdateQuestionFn = func(question *models.Question) (*models.Question, error) {
 		return &models.Question{
-			ID: "1",
+			ID:    "1",
 			Title: "Question title updated",
 		}, nil
 	}
@@ -95,18 +92,18 @@ func TestUpdateQuestion_Success(t *testing.T) {
 	//also the mock on the question option:
 	CreateQuestionOptionFn = func(question *models.QuestionOption) (*models.QuestionOption, error) {
 		return &models.QuestionOption{
-			ID: "1",
-			Title: "Option 1",
-			Position: 1,
+			ID:        "1",
+			Title:     "Option 1",
+			Position:  1,
 			IsCorrect: true,
 		}, nil
 	}
 
 	var resp struct {
 		UpdateQuestion struct {
-			Message     string
-			Status      int
-			Data       	models.Question
+			Message string
+			Status  int
+			Data    models.Question
 		}
 	}
 
@@ -118,28 +115,27 @@ func TestUpdateQuestion_Success(t *testing.T) {
 	assert.Equal(t, "1", resp.UpdateQuestion.Data.ID)
 }
 
-
 func TestDeleteQuestion_Success(t *testing.T) {
 
 	var srv = client.New(handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &interfaces.Resolver{
-		QuestionService: fakeQuestion, //this is swap with the real interface
+		QuestionService:       fakeQuestion,       //this is swap with the real interface
 		QuestionOptionService: fakeQuestionOption, //this is swap with the real interface
 	}})))
 
 	//We dont call the domain method, we swap it with this
-	DeleteQuestionFn = func(id string)  error {
+	DeleteQuestionFn = func(id string) error {
 		return nil
 	}
 
 	//We dont call the domain method, we swap it with this
-	DeleteQuestionOptionByQuestionIDFn = func(questionId string)  error {
+	DeleteQuestionOptionByQuestionIDFn = func(questionId string) error {
 		return nil
 	}
 
 	var resp struct {
 		DeleteQuestion struct {
-			Message     string
-			Status      int
+			Message string
+			Status  int
 		}
 	}
 
@@ -148,7 +144,6 @@ func TestDeleteQuestion_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.DeleteQuestion.Status)
 	assert.Equal(t, "Successfully deleted question", resp.DeleteQuestion.Message)
 }
-
 
 func TestGetOneQuestion_Success(t *testing.T) {
 
@@ -159,9 +154,9 @@ func TestGetOneQuestion_Success(t *testing.T) {
 	//just populate only one option
 	options := []*models.QuestionOption{
 		{
-			ID: "1",
-			Title: "Option 1",
-			Position: 1,
+			ID:        "1",
+			Title:     "Option 1",
+			Position:  1,
 			IsCorrect: false,
 		},
 	}
@@ -169,17 +164,17 @@ func TestGetOneQuestion_Success(t *testing.T) {
 	//We dont call the domain method, we swap it with this
 	GetQuestionByIDFn = func(id string) (*models.Question, error) {
 		return &models.Question{
-			ID: "1",
-			Title: "Question title",
+			ID:             "1",
+			Title:          "Question title",
 			QuestionOption: options,
 		}, nil
 	}
 
 	var resp struct {
 		GetOneQuestion struct {
-			Message     string
-			Status      int
-			Data       models.Question
+			Message string
+			Status  int
+			Data    models.Question
 		}
 	}
 
@@ -210,15 +205,15 @@ func TestGetAllQuestions_Success(t *testing.T) {
 	//just populate only one option
 	options := []*models.QuestionOption{
 		{
-			ID: "1",
-			Title: "Option 1",
-			Position: 1,
+			ID:        "1",
+			Title:     "Option 1",
+			Position:  1,
 			IsCorrect: false,
 		},
 		{
-			ID: "2",
-			Title: "Option 2",
-			Position: 2,
+			ID:        "2",
+			Title:     "Option 2",
+			Position:  2,
 			IsCorrect: true,
 		},
 	}
@@ -227,13 +222,13 @@ func TestGetAllQuestions_Success(t *testing.T) {
 	GetAllQuestionsFn = func() ([]*models.Question, error) {
 		return []*models.Question{
 			{
-				ID: "1",
-				Title: "Question title 1",
+				ID:             "1",
+				Title:          "Question title 1",
 				QuestionOption: options,
 			},
 			{
-				ID: "2",
-				Title: "Question title 2",
+				ID:             "2",
+				Title:          "Question title 2",
 				QuestionOption: options,
 			},
 		}, nil
@@ -241,9 +236,9 @@ func TestGetAllQuestions_Success(t *testing.T) {
 
 	var resp struct {
 		GetAllQuestions struct {
-			Message     string
-			Status      int
-			DataList       []*models.Question
+			Message  string
+			Status   int
+			DataList []*models.Question
 		}
 	}
 
@@ -265,7 +260,3 @@ func TestGetAllQuestions_Success(t *testing.T) {
 		assert.Equal(t, 2, len(v.QuestionOption))
 	}
 }
-
-
-
-

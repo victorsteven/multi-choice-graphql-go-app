@@ -4,14 +4,13 @@ import (
 	"multi-choice/app/models"
 )
 
-
 //We need to mock the domain layer, so we can achieve unit test in the interfaces layer:
 
 //Question Domain Mocking
 var (
-	CreateQuestionFn func(*models.Question) (*models.Question, error)
-	UpdateQuestionFn func(*models.Question) (*models.Question, error)
-	DeleteQuestionFn func(string) error
+	CreateQuestionFn  func(*models.Question) (*models.Question, error)
+	UpdateQuestionFn  func(*models.Question) (*models.Question, error)
+	DeleteQuestionFn  func(string) error
 	GetQuestionByIDFn func(string) (*models.Question, error)
 	GetAllQuestionsFn func() ([]*models.Question, error)
 )
@@ -39,12 +38,12 @@ func (q *fakeQuestionService) GetAllQuestions() ([]*models.Question, error) {
 ////////////////////////////////////////
 //QuestionOption Domain Mocking
 var (
-	CreateQuestionOptionFn func(option *models.QuestionOption) (*models.QuestionOption, error)
-	UpdateQuestionOptionFn func(option *models.QuestionOption) (*models.QuestionOption, error)
-	DeleteQuestionOptionFn func(string) error
+	CreateQuestionOptionFn             func(option *models.QuestionOption) (*models.QuestionOption, error)
+	UpdateQuestionOptionFn             func(option *models.QuestionOption) (*models.QuestionOption, error)
+	DeleteQuestionOptionFn             func(string) error
 	DeleteQuestionOptionByQuestionIDFn func(questionId string) error
-	GetQuestionOptionByIDFn func(string) (*models.QuestionOption, error)
-	GetQuestionOptionByQuestionID func(questionId string) ([]*models.QuestionOption, error)
+	GetQuestionOptionByIDFn            func(string) (*models.QuestionOption, error)
+	GetQuestionOptionByQuestionID      func(questionId string) ([]*models.QuestionOption, error)
 )
 
 func (o *fakeQuestionOptionService) CreateQuestionOption(option *models.QuestionOption) (*models.QuestionOption, error) {
@@ -71,18 +70,17 @@ func (o *fakeQuestionOptionService) GetQuestionOptionByQuestionID(questionId str
 	return GetQuestionOptionByQuestionID(questionId)
 }
 
-
 ////////////////////////////////////////
 //QuestionOption Domain Mocking
 var (
-	CreateAnswerFn func(answer *models.Answer) (*models.Answer, error)
-	UpdateAnswerFn func(answer *models.Answer) (*models.Answer, error)
-	DeleteAnswerFn func(id string) error
-	GetAnswerByIDFn func(id string) (*models.Answer, error)
+	CreateAnswerFn          func(answer *models.Answer) (*models.Answer, error)
+	UpdateAnswerFn          func(answer *models.Answer) (*models.Answer, error)
+	DeleteAnswerFn          func(id string) error
+	GetAnswerByIDFn         func(id string) (*models.Answer, error)
 	GetAllQuestionAnswersFn func(questionId string) ([]*models.Answer, error)
 )
 
-func (a *fakeAnswerService) CreateAnswer(answer *models.Answer) (*models.Answer, error){
+func (a *fakeAnswerService) CreateAnswer(answer *models.Answer) (*models.Answer, error) {
 	return CreateAnswerFn(answer)
 }
 
@@ -101,8 +99,3 @@ func (a *fakeAnswerService) GetAnswerByID(id string) (*models.Answer, error) {
 func (a *fakeAnswerService) GetAllQuestionAnswers(questionId string) ([]*models.Answer, error) {
 	return GetAllQuestionAnswersFn(questionId)
 }
-
-
-
-
-

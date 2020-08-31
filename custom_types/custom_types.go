@@ -14,24 +14,7 @@ func New() Time {
 	return time.Now()
 }
 
-// Lets redefine the base ID type to use an id as int
-//func MarshalID(id int) graphql.Marshaler {
-//	return graphql.WriterFunc(func(w io.Writer) {
-//		io.WriteString(w, strconv.Quote(fmt.Sprintf("%d", id)))
-//	})
-//}
-//
-//// And the same for the unmarshaler
-//func UnmarshalID(v interface{}) (int, error) {
-//	id, ok := v.(string)
-//	if !ok {
-//		return 0, fmt.Errorf("ids must be strings")
-//	}
-//	i, e := strconv.Atoi(id)
-//	return int(i), e
-//}
-
-func MarshalTimestamp(t time.Time) graphql.Marshaler {
+func MarshalTime(t time.Time) graphql.Marshaler {
 	timestamp := t.Unix() * 1000
 
 	return graphql.WriterFunc(func(w io.Writer) {
@@ -39,7 +22,7 @@ func MarshalTimestamp(t time.Time) graphql.Marshaler {
 	})
 }
 
-func UnmarshalTimestamp(v interface{}) (Time, error) {
+func UnmarshalTime(v interface{}) (Time, error) {
 	if tmpStr, ok := v.(int); ok {
 		return time.Unix(int64(tmpStr), 0), nil
 	}

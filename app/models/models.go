@@ -2,11 +2,17 @@
 
 package models
 
+import (
+	"time"
+)
+
 type Answer struct {
-	ID         string `json:"id" db:"id"`
-	QuestionID string `json:"questionId" db:"questionId"`
-	OptionID   string `json:"optionId" db:"optionId"`
-	IsCorrect  bool   `json:"isCorrect" db:"isCorrect"`
+	ID         string    `json:"id" db:"id"`
+	QuestionID string    `json:"questionId" db:"questionId"`
+	OptionID   string    `json:"optionId" db:"optionId"`
+	IsCorrect  bool      `json:"isCorrect" db:"isCorrect"`
+	CreatedAt  time.Time `json:"createdAt" db:"createdAt"`
+	UpdatedAt  time.Time `json:"updatedAt" db:"updatedAt"`
 }
 
 type AnswerResponse struct {
@@ -20,6 +26,8 @@ type Question struct {
 	ID             string            `json:"id" db:"id"`
 	Title          string            `json:"title" gorm:"unique" db:"title"`
 	QuestionOption []*QuestionOption `json:"questionOption" db:"questionOption"`
+	CreatedAt      time.Time         `json:"createdAt" db:"createdAt"`
+	UpdatedAt      time.Time         `json:"updatedAt" db:"updatedAt"`
 }
 
 type QuestionInput struct {
@@ -28,11 +36,13 @@ type QuestionInput struct {
 }
 
 type QuestionOption struct {
-	ID         string `json:"id" db:"id"`
-	QuestionID string `json:"questionId" db:"questionId"`
-	Title      string `json:"title" db:"title"`
-	Position   int    `json:"position" db:"position"`
-	IsCorrect  bool   `json:"isCorrect" db:"isCorrect"`
+	ID         string    `json:"id" db:"id"`
+	QuestionID string    `json:"questionId" db:"questionId"`
+	Title      string    `json:"title" db:"title"`
+	Position   int       `json:"position" db:"position"`
+	IsCorrect  bool      `json:"isCorrect" db:"isCorrect"`
+	CreatedAt  time.Time `json:"createdAt" db:"createdAt"`
+	UpdatedAt  time.Time `json:"updatedAt" db:"updatedAt"`
 }
 
 type QuestionOptionInput struct {

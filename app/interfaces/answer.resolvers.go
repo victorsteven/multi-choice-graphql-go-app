@@ -9,10 +9,10 @@ import (
 	"multi-choice/app/models"
 	"multi-choice/helpers"
 	"net/http"
+	"time"
 )
 
 func (r *mutationResolver) CreateAnswer(ctx context.Context, questionID string, optionID string) (*models.AnswerResponse, error) {
-
 	ans := &models.Answer{
 		QuestionID: questionID,
 		OptionID:   optionID,
@@ -39,6 +39,9 @@ func (r *mutationResolver) CreateAnswer(ctx context.Context, questionID string, 
 	} else {
 		ans.IsCorrect = false
 	}
+
+	ans.CreatedAt = time.Now()
+	ans.UpdatedAt = time.Now()
 
 	answer, err := r.AnsService.CreateAnswer(ans)
 	if err != nil {
@@ -68,6 +71,7 @@ func (r *mutationResolver) UpdateAnswer(ctx context.Context, id string, question
 
 	ans.OptionID = optionID
 	ans.QuestionID = questionID
+	ans.UpdatedAt = time.Now()
 
 	if ok, errorString := helpers.ValidateInputs(*ans); !ok {
 		return &models.AnswerResponse{

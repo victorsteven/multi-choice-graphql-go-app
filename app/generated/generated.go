@@ -7,8 +7,10 @@ import (
 	"context"
 	"errors"
 	"multi-choice/app/models"
+	"multi-choice/custom_types"
 	"strconv"
 	"sync"
+	"time"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
@@ -43,10 +45,12 @@ type DirectiveRoot struct {
 
 type ComplexityRoot struct {
 	Answer struct {
+		CreatedAt  func(childComplexity int) int
 		ID         func(childComplexity int) int
 		IsCorrect  func(childComplexity int) int
 		OptionID   func(childComplexity int) int
 		QuestionID func(childComplexity int) int
+		UpdatedAt  func(childComplexity int) int
 	}
 
 	AnswerResponse struct {
@@ -73,17 +77,21 @@ type ComplexityRoot struct {
 	}
 
 	Question struct {
+		CreatedAt      func(childComplexity int) int
 		ID             func(childComplexity int) int
 		QuestionOption func(childComplexity int) int
 		Title          func(childComplexity int) int
+		UpdatedAt      func(childComplexity int) int
 	}
 
 	QuestionOption struct {
+		CreatedAt  func(childComplexity int) int
 		ID         func(childComplexity int) int
 		IsCorrect  func(childComplexity int) int
 		Position   func(childComplexity int) int
 		QuestionID func(childComplexity int) int
 		Title      func(childComplexity int) int
+		UpdatedAt  func(childComplexity int) int
 	}
 
 	QuestionResponse struct {
@@ -124,6 +132,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	_ = ec
 	switch typeName + "." + field {
 
+	case "Answer.createdAt":
+		if e.complexity.Answer.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Answer.CreatedAt(childComplexity), true
+
 	case "Answer.id":
 		if e.complexity.Answer.ID == nil {
 			break
@@ -151,6 +166,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Answer.QuestionID(childComplexity), true
+
+	case "Answer.updatedAt":
+		if e.complexity.Answer.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Answer.UpdatedAt(childComplexity), true
 
 	case "AnswerResponse.data":
 		if e.complexity.AnswerResponse.Data == nil {
@@ -295,6 +317,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.GetOneQuestion(childComplexity, args["id"].(string)), true
 
+	case "Question.createdAt":
+		if e.complexity.Question.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Question.CreatedAt(childComplexity), true
+
 	case "Question.id":
 		if e.complexity.Question.ID == nil {
 			break
@@ -315,6 +344,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Question.Title(childComplexity), true
+
+	case "Question.updatedAt":
+		if e.complexity.Question.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Question.UpdatedAt(childComplexity), true
+
+	case "QuestionOption.createdAt":
+		if e.complexity.QuestionOption.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.QuestionOption.CreatedAt(childComplexity), true
 
 	case "QuestionOption.id":
 		if e.complexity.QuestionOption.ID == nil {
@@ -350,6 +393,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.QuestionOption.Title(childComplexity), true
+
+	case "QuestionOption.updatedAt":
+		if e.complexity.QuestionOption.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.QuestionOption.UpdatedAt(childComplexity), true
 
 	case "QuestionResponse.data":
 		if e.complexity.QuestionResponse.Data == nil {
@@ -448,8 +498,8 @@ var sources = []*ast.Source{
     questionId: ID!
     optionId: ID!
     isCorrect: Boolean!
-#    createdAt: Time!
-#    updatedAt: Time!
+    createdAt: Time!
+    updatedAt: Time!
 }
 
 extend type Mutation {
@@ -473,8 +523,8 @@ type AnswerResponse {
     id: ID!
     title: String!
     questionOption: [QuestionOption]
-#    createdAt: Time!
-#    updatedAt: Time!
+    createdAt: Time!
+    updatedAt: Time!
 }
 
 input QuestionInput {
@@ -506,8 +556,8 @@ type QuestionResponse {
     title: String!
     position: Int!
     isCorrect: Boolean!
-#    createdAt: Time!
-#    updatedAt: Time!
+    createdAt: Time!
+    updatedAt: Time!
 }
 
 input QuestionOptionInput {
@@ -523,13 +573,7 @@ input QuestionOptionInput {
 
 scalar Time
 
-scalar Any
 
-#type Response {
-#    message: String!
-#    status: Int!
-#    data: Any
-#}
 `, BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
@@ -896,6 +940,74 @@ func (ec *executionContext) _Answer_isCorrect(ctx context.Context, field graphql
 	res := resTmp.(bool)
 	fc.Result = res
 	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Answer_createdAt(ctx context.Context, field graphql.CollectedField, obj *models.Answer) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Answer",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(time.Time)
+	fc.Result = res
+	return ec.marshalNTime2timeᚐTime(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Answer_updatedAt(ctx context.Context, field graphql.CollectedField, obj *models.Answer) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Answer",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(time.Time)
+	fc.Result = res
+	return ec.marshalNTime2timeᚐTime(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _AnswerResponse_message(ctx context.Context, field graphql.CollectedField, obj *models.AnswerResponse) (ret graphql.Marshaler) {
@@ -1569,6 +1681,74 @@ func (ec *executionContext) _Question_questionOption(ctx context.Context, field 
 	return ec.marshalOQuestionOption2ᚕᚖmultiᚑchoiceᚋappᚋmodelsᚐQuestionOption(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _Question_createdAt(ctx context.Context, field graphql.CollectedField, obj *models.Question) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Question",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(time.Time)
+	fc.Result = res
+	return ec.marshalNTime2timeᚐTime(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Question_updatedAt(ctx context.Context, field graphql.CollectedField, obj *models.Question) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Question",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(time.Time)
+	fc.Result = res
+	return ec.marshalNTime2timeᚐTime(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _QuestionOption_id(ctx context.Context, field graphql.CollectedField, obj *models.QuestionOption) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -1737,6 +1917,74 @@ func (ec *executionContext) _QuestionOption_isCorrect(ctx context.Context, field
 	res := resTmp.(bool)
 	fc.Result = res
 	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _QuestionOption_createdAt(ctx context.Context, field graphql.CollectedField, obj *models.QuestionOption) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "QuestionOption",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(time.Time)
+	fc.Result = res
+	return ec.marshalNTime2timeᚐTime(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _QuestionOption_updatedAt(ctx context.Context, field graphql.CollectedField, obj *models.QuestionOption) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "QuestionOption",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(time.Time)
+	fc.Result = res
+	return ec.marshalNTime2timeᚐTime(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _QuestionResponse_message(ctx context.Context, field graphql.CollectedField, obj *models.QuestionResponse) (ret graphql.Marshaler) {
@@ -3027,6 +3275,16 @@ func (ec *executionContext) _Answer(ctx context.Context, sel ast.SelectionSet, o
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "createdAt":
+			out.Values[i] = ec._Answer_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._Answer_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -3209,6 +3467,16 @@ func (ec *executionContext) _Question(ctx context.Context, sel ast.SelectionSet,
 			}
 		case "questionOption":
 			out.Values[i] = ec._Question_questionOption(ctx, field, obj)
+		case "createdAt":
+			out.Values[i] = ec._Question_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._Question_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -3253,6 +3521,16 @@ func (ec *executionContext) _QuestionOption(ctx context.Context, sel ast.Selecti
 			}
 		case "isCorrect":
 			out.Values[i] = ec._QuestionOption_isCorrect(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "createdAt":
+			out.Values[i] = ec._QuestionOption_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._QuestionOption_updatedAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -3631,6 +3909,21 @@ func (ec *executionContext) unmarshalNString2string(ctx context.Context, v inter
 
 func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
 	res := graphql.MarshalString(v)
+	if res == graphql.Null {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+	}
+	return res
+}
+
+func (ec *executionContext) unmarshalNTime2timeᚐTime(ctx context.Context, v interface{}) (time.Time, error) {
+	res, err := custom_types.UnmarshalTime(v)
+	return res, graphql.WrapErrorWithInputPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNTime2timeᚐTime(ctx context.Context, sel ast.SelectionSet, v time.Time) graphql.Marshaler {
+	res := custom_types.MarshalTime(v)
 	if res == graphql.Null {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")

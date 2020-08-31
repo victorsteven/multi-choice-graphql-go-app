@@ -11,6 +11,7 @@ import (
 	"multi-choice/app/models"
 	"multi-choice/helpers"
 	"net/http"
+	"time"
 )
 
 func (r *mutationResolver) CreateQuestion(ctx context.Context, question models.QuestionInput) (*models.QuestionResponse, error) {
@@ -25,6 +26,9 @@ func (r *mutationResolver) CreateQuestion(ctx context.Context, question models.Q
 	ques := &models.Question{
 		Title: question.Title,
 	}
+
+	ques.CreatedAt = time.Now()
+	ques.UpdatedAt = time.Now()
 
 	//save the question:
 	quest, err := r.QuestionService.CreateQuestion(ques)
@@ -51,6 +55,8 @@ func (r *mutationResolver) CreateQuestion(ctx context.Context, question models.Q
 			Title:      v.Title,
 			Position:   v.Position,
 			IsCorrect:  v.IsCorrect,
+			CreatedAt:  time.Now(),
+			UpdatedAt:  time.Now(),
 		}
 
 		_, err := r.QuestionOptionService.CreateQuestionOption(quesOpt)
@@ -88,6 +94,7 @@ func (r *mutationResolver) UpdateQuestion(ctx context.Context, id string, questi
 	}
 
 	ques.Title = question.Title
+	ques.UpdatedAt = time.Now()
 
 	//save the question:
 	quest, err := r.QuestionService.UpdateQuestion(ques)
@@ -121,6 +128,8 @@ func (r *mutationResolver) UpdateQuestion(ctx context.Context, id string, questi
 			Title:      v.Title,
 			Position:   v.Position,
 			IsCorrect:  v.IsCorrect,
+			CreatedAt:  time.Now(),
+			UpdatedAt:  time.Now(),
 		}
 
 		_, err := r.QuestionOptionService.CreateQuestionOption(quesOpt)
@@ -181,7 +190,6 @@ func (r *queryResolver) GetOneQuestion(ctx context.Context, id string) (*models.
 }
 
 func (r *queryResolver) GetAllQuestions(ctx context.Context) (*models.QuestionResponse, error) {
-
 	questions, err := r.QuestionService.GetAllQuestions()
 	if err != nil {
 		log.Println("getting all questions error: ", err)

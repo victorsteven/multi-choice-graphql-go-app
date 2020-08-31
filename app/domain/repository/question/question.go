@@ -11,4 +11,3 @@ type QuesService interface {
 	GetQuestionByID(id string) (*models.Question, error)
 	GetAllQuestions() ([]*models.Question, error)
 }
-

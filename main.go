@@ -7,13 +7,13 @@ import (
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	"log"
-	"multi-choice/app/interfaces"
 	"multi-choice/app/domain/repository/answer"
 	"multi-choice/app/domain/repository/question"
 	"multi-choice/app/domain/repository/question_option"
 	"multi-choice/app/generated"
 	"multi-choice/app/infrastructure/db"
 	"multi-choice/app/infrastructure/persistence"
+	"multi-choice/app/interfaces"
 	"net/http"
 	"os"
 )
@@ -25,16 +25,14 @@ func init() {
 	}
 }
 
-
-
 func main() {
 
 	var (
-		defaultPort = "8080"
-		databaseUser = os.Getenv("DATABASE_USER")
-		databaseName = os.Getenv("DATABASE_NAME")
-		databaseHost = os.Getenv("DATABASE_HOST")
-		databasePort = os.Getenv("DATABASE_PORT")
+		defaultPort      = "8080"
+		databaseUser     = os.Getenv("DATABASE_USER")
+		databaseName     = os.Getenv("DATABASE_NAME")
+		databaseHost     = os.Getenv("DATABASE_HOST")
+		databasePort     = os.Getenv("DATABASE_PORT")
 		databasePassword = os.Getenv("DATABASE_PASSWORD")
 	)
 
@@ -57,10 +55,9 @@ func main() {
 	questionService = persistence.NewQuestion(conn)
 	questionOptService = persistence.NewQuestionOption(conn)
 
-
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &interfaces.Resolver{
-		AnsService: ansService,
-		QuestionService: questionService,
+		AnsService:            ansService,
+		QuestionService:       questionService,
 		QuestionOptionService: questionOptService,
 	}}))
 
@@ -70,4 +67,3 @@ func main() {
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
-

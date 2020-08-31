@@ -3,8 +3,8 @@ type Answer {
     questionId: ID!
     optionId: ID!
     isCorrect: Boolean!
-#    createdAt: Time!
-#    updatedAt: Time!
+    createdAt: Time!
+    updatedAt: Time!
 }
 
 extend type Mutation {

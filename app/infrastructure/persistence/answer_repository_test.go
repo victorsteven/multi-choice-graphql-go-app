@@ -29,7 +29,6 @@ func TestCreateAnswer_Success(t *testing.T) {
 	assert.EqualValues(t, a.IsCorrect, false)
 }
 
-
 func TestGetAnswerByID_Success(t *testing.T) {
 	conn, err := DBConn()
 	if err != nil {
@@ -69,7 +68,6 @@ func TestGetAllAnswersForQuestion_Success(t *testing.T) {
 	//anss, getErr := repo.GetAllQuestionAnswers(answers[0].QuestionID)
 	anss, getErr := repo.GetAllQuestionAnswers("1")
 
-
 	assert.Nil(t, getErr)
 	assert.EqualValues(t, len(anss), 2)
 }
@@ -94,7 +92,6 @@ func TestUpdateAnswer_Success(t *testing.T) {
 	assert.Nil(t, updateErr)
 	assert.EqualValues(t, a.IsCorrect, ans.IsCorrect)
 }
-
 
 func TestDeleteAnswer_Success(t *testing.T) {
 	conn, err := DBConn()

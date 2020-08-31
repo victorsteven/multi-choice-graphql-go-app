@@ -7,7 +7,6 @@ import (
 	"os"
 )
 
-
 func OpenDB(database string) *gorm.DB {
 
 	databaseDriver := os.Getenv("DATABASE_DRIVER")

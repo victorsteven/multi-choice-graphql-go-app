@@ -4,10 +4,4 @@
 
 scalar Time
 
-scalar Any
 
-#type Response {
-#    message: String!
-#    status: Int!
-#    data: Any
-#}

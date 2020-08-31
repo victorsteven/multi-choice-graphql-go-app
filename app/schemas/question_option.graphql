@@ -4,8 +4,8 @@ type QuestionOption {
     title: String!
     position: Int!
     isCorrect: Boolean!
-#    createdAt: Time!
-#    updatedAt: Time!
+    createdAt: Time!
+    updatedAt: Time!
 }
 
 input QuestionOptionInput {

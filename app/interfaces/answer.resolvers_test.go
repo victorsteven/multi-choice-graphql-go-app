@@ -11,41 +11,41 @@ import (
 	"testing"
 )
 
-type fakeAnswerService struct {}
+type fakeAnswerService struct{}
 
 var fakeAnswer answer.AnsService = &fakeAnswerService{} //this is where the real implementation is swap with our fake implementation
 
 func TestCreateAnswer_Success(t *testing.T) {
 
 	var srv = client.New(handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &interfaces.Resolver{
-		AnsService: fakeAnswer,  //this is swap with the real interface
+		AnsService:            fakeAnswer,         //this is swap with the real interface
 		QuestionOptionService: fakeQuestionOption, //this is swap with the real interface
 	}})))
 
 	//We dont call the domain method, we swap it with this
 	CreateAnswerFn = func(answer *models.Answer) (*models.Answer, error) {
 		return &models.Answer{
-			ID: "1",
+			ID:         "1",
 			QuestionID: "1",
-			OptionID: "1",
-			IsCorrect: false,
+			OptionID:   "1",
+			IsCorrect:  false,
 		}, nil
 	}
 
 	//We dont call the domain method, we swap it with this
 	GetQuestionOptionByIDFn = func(id string) (*models.QuestionOption, error) {
 		return &models.QuestionOption{
-			ID: "1",
-			Title: "Option 1",
+			ID:        "1",
+			Title:     "Option 1",
 			IsCorrect: true,
 		}, nil
 	}
 
 	var resp struct {
 		CreateAnswer struct {
-			Message     string
-			Status      int
-			Data       models.Answer
+			Message string
+			Status  int
+			Data    models.Answer
 		}
 	}
 
@@ -57,7 +57,6 @@ func TestCreateAnswer_Success(t *testing.T) {
 	assert.Equal(t, "1", resp.CreateAnswer.Data.ID)
 }
 
-
 func TestUpdateAnswer_Success(t *testing.T) {
 
 	var srv = client.New(handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &interfaces.Resolver{
@@ -67,27 +66,27 @@ func TestUpdateAnswer_Success(t *testing.T) {
 	//We dont call the domain method, we swap it with this
 	GetAnswerByIDFn = func(id string) (*models.Answer, error) {
 		return &models.Answer{
-			ID: "1",
+			ID:         "1",
 			QuestionID: "1",
-			OptionID: "1",
+			OptionID:   "1",
 		}, nil
 	}
 
 	//We dont call the domain method, we swap it with this
 	UpdateAnswerFn = func(ans *models.Answer) (*models.Answer, error) {
 		return &models.Answer{
-			ID: "1",
+			ID:         "1",
 			QuestionID: "1",
-			OptionID: "2",
-			IsCorrect: false,
+			OptionID:   "2",
+			IsCorrect:  false,
 		}, nil
 	}
 
 	var resp struct {
 		UpdateAnswer struct {
-			Message     string
-			Status      int
-			Data       	models.Answer
+			Message string
+			Status  int
+			Data    models.Answer
 		}
 	}
 
@@ -99,7 +98,6 @@ func TestUpdateAnswer_Success(t *testing.T) {
 	assert.Equal(t, false, resp.UpdateAnswer.Data.IsCorrect)
 }
 
-
 func TestDeleteAnswer_Success(t *testing.T) {
 
 	var srv = client.New(handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &interfaces.Resolver{
@@ -107,14 +105,14 @@ func TestDeleteAnswer_Success(t *testing.T) {
 	}})))
 
 	//We dont call the domain method, we swap it with this
-	DeleteAnswerFn = func(id string)  error {
+	DeleteAnswerFn = func(id string) error {
 		return nil
 	}
 
 	var resp struct {
 		DeleteAnswer struct {
-			Message     string
-			Status      int
+			Message string
+			Status  int
 		}
 	}
 
@@ -123,7 +121,6 @@ func TestDeleteAnswer_Success(t *testing.T) {
 	assert.Equal(t, 200, resp.DeleteAnswer.Status)
 	assert.Equal(t, "Successfully deleted answer", resp.DeleteAnswer.Message)
 }
-
 
 func TestGetOneAnswer_Success(t *testing.T) {
 
@@ -134,18 +131,18 @@ func TestGetOneAnswer_Success(t *testing.T) {
 	//We dont call the domain method, we swap it with this
 	GetAnswerByIDFn = func(id string) (*models.Answer, error) {
 		return &models.Answer{
-			ID: "1",
+			ID:         "1",
 			QuestionID: "1",
-			OptionID: "1",
-			IsCorrect: true,
+			OptionID:   "1",
+			IsCorrect:  true,
 		}, nil
 	}
 
 	var resp struct {
 		GetOneAnswer struct {
-			Message     string
-			Status      int
-			Data       models.Answer
+			Message string
+			Status  int
+			Data    models.Answer
 		}
 	}
 
@@ -165,32 +162,32 @@ func TestGetOneAnswer_Success(t *testing.T) {
 func TestGetAllQuestionAnswers_Success(t *testing.T) {
 
 	var srv = client.New(handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &interfaces.Resolver{
-		AnsService: fakeAnswer,  //this is swap with the real interface
+		AnsService: fakeAnswer, //this is swap with the real interface
 	}})))
 
 	//We dont call the domain method, we swap it with this
 	GetAllQuestionAnswersFn = func(questionId string) ([]*models.Answer, error) {
 		return []*models.Answer{
 			{
-				ID: "1",
+				ID:         "1",
 				QuestionID: "1",
-				OptionID: "1",
-				IsCorrect: true,
+				OptionID:   "1",
+				IsCorrect:  true,
 			},
 			{
-				ID: "2",
+				ID:         "2",
 				QuestionID: "1",
-				OptionID: "2",
-				IsCorrect: false,
+				OptionID:   "2",
+				IsCorrect:  false,
 			},
 		}, nil
 	}
 
 	var resp struct {
 		GetAllQuestionAnswers struct {
-			Message     string
-			Status      int
-			DataList       []*models.Answer
+			Message  string
+			Status   int
+			DataList []*models.Answer
 		}
 	}
 
