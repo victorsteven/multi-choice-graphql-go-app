@@ -10,9 +10,6 @@ import (
 
 type Time = time.Time
 
-func New() Time {
-	return time.Now()
-}
 
 func MarshalTime(t time.Time) graphql.Marshaler {
 	timestamp := t.Unix() * 1000
