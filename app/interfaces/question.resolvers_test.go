@@ -79,6 +79,7 @@ func TestUpdateQuestion_Success(t *testing.T) {
 		}, nil
 	}
 
+	//We dont call the domain method, we swap it with this
 	DeleteQuestionOptionByQuestionIDFn = func(questionId string)  error {
 		return nil
 	}
@@ -125,10 +126,12 @@ func TestDeleteQuestion_Success(t *testing.T) {
 		QuestionOptionService: fakeQuestionOption, //this is swap with the real interface
 	}})))
 
+	//We dont call the domain method, we swap it with this
 	DeleteQuestionFn = func(id string)  error {
 		return nil
 	}
 
+	//We dont call the domain method, we swap it with this
 	DeleteQuestionOptionByQuestionIDFn = func(questionId string)  error {
 		return nil
 	}

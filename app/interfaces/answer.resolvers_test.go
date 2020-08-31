@@ -18,9 +18,8 @@ var fakeAnswer answer.AnsService = &fakeAnswerService{} //this is where the real
 func TestCreateAnswer_Success(t *testing.T) {
 
 	var srv = client.New(handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &interfaces.Resolver{
-		QuestionService: fakeQuestion, //this is swap with the real interface
+		AnsService: fakeAnswer,  //this is swap with the real interface
 		QuestionOptionService: fakeQuestionOption, //this is swap with the real interface
-		AnsService: fakeAnswer,
 	}})))
 
 	//We dont call the domain method, we swap it with this
@@ -62,9 +61,7 @@ func TestCreateAnswer_Success(t *testing.T) {
 func TestUpdateAnswer_Success(t *testing.T) {
 
 	var srv = client.New(handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &interfaces.Resolver{
-		QuestionService: fakeQuestion, //this is swap with the real interface
-		QuestionOptionService: fakeQuestionOption, //this is swap with the real interface
-		AnsService: fakeAnswer,
+		AnsService: fakeAnswer, //this is swap with the real interface
 	}})))
 
 	//We dont call the domain method, we swap it with this
@@ -106,11 +103,10 @@ func TestUpdateAnswer_Success(t *testing.T) {
 func TestDeleteAnswer_Success(t *testing.T) {
 
 	var srv = client.New(handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &interfaces.Resolver{
-		QuestionService: fakeQuestion, //this is swap with the real interface
-		QuestionOptionService: fakeQuestionOption, //this is swap with the real interface
-		AnsService: fakeAnswer,
+		AnsService: fakeAnswer, //this is swap with the real interface
 	}})))
 
+	//We dont call the domain method, we swap it with this
 	DeleteAnswerFn = func(id string)  error {
 		return nil
 	}
@@ -132,9 +128,7 @@ func TestDeleteAnswer_Success(t *testing.T) {
 func TestGetOneAnswer_Success(t *testing.T) {
 
 	var srv = client.New(handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &interfaces.Resolver{
-		QuestionService: fakeQuestion, //this is swap with the real interface
-		QuestionOptionService: fakeQuestionOption, //this is swap with the real interface
-		AnsService: fakeAnswer,
+		AnsService: fakeAnswer, //this is swap with the real interface
 	}})))
 
 	//We dont call the domain method, we swap it with this
@@ -171,9 +165,7 @@ func TestGetOneAnswer_Success(t *testing.T) {
 func TestGetAllQuestionAnswers_Success(t *testing.T) {
 
 	var srv = client.New(handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &interfaces.Resolver{
-		QuestionService: fakeQuestion, //this is swap with the real interface
-		QuestionOptionService: fakeQuestionOption, //this is swap with the real interface
-		AnsService: fakeAnswer,
+		AnsService: fakeAnswer,  //this is swap with the real interface
 	}})))
 
 	//We dont call the domain method, we swap it with this
