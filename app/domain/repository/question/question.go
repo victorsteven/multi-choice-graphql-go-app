@@ -9,6 +9,6 @@ type QuesService interface {
 	UpdateQuestion(question *models.Question) (*models.Question, error)
 	DeleteQuestion(id string) error
 	GetQuestionByID(id string) (*models.Question, error)
-	GetAllQuestion() ([]*models.Question, error)
+	GetAllQuestions() ([]*models.Question, error)
 }
 

@@ -73,7 +73,7 @@ func TestGetAllQuestion_Success(t *testing.T) {
 		t.Fatalf("want non error, got %#v", err)
 	}
 	repo := persistence.NewQuestion(conn)
-	questions, getErr := repo.GetAllQuestion()
+	questions, getErr := repo.GetAllQuestions()
 
 	assert.Nil(t, getErr)
 	assert.EqualValues(t, len(questions), 2)

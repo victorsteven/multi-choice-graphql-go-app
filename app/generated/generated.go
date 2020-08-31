@@ -73,8 +73,9 @@ type ComplexityRoot struct {
 	}
 
 	Question struct {
-		ID    func(childComplexity int) int
-		Title func(childComplexity int) int
+		ID             func(childComplexity int) int
+		QuestionOption func(childComplexity int) int
+		Title          func(childComplexity int) int
 	}
 
 	QuestionOption struct {
@@ -301,6 +302,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Question.ID(childComplexity), true
 
+	case "Question.questionOption":
+		if e.complexity.Question.QuestionOption == nil {
+			break
+		}
+
+		return e.complexity.Question.QuestionOption(childComplexity), true
+
 	case "Question.title":
 		if e.complexity.Question.Title == nil {
 			break
@@ -464,6 +472,7 @@ type AnswerResponse {
 	{Name: "app/schemas/question.graphql", Input: `type Question {
     id: ID!
     title: String!
+    questionOption: [QuestionOption]
 #    createdAt: Time!
 #    updatedAt: Time!
 }
@@ -1527,6 +1536,37 @@ func (ec *executionContext) _Question_title(ctx context.Context, field graphql.C
 	res := resTmp.(string)
 	fc.Result = res
 	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Question_questionOption(ctx context.Context, field graphql.CollectedField, obj *models.Question) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Question",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.QuestionOption, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*models.QuestionOption)
+	fc.Result = res
+	return ec.marshalOQuestionOption2ᚕᚖmultiᚑchoiceᚋappᚋmodelsᚐQuestionOption(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _QuestionOption_id(ctx context.Context, field graphql.CollectedField, obj *models.QuestionOption) (ret graphql.Marshaler) {
@@ -3167,6 +3207,8 @@ func (ec *executionContext) _Question(ctx context.Context, sel ast.SelectionSet,
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "questionOption":
+			out.Values[i] = ec._Question_questionOption(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -3949,6 +3991,53 @@ func (ec *executionContext) marshalOQuestion2ᚖmultiᚑchoiceᚋappᚋmodelsᚐ
 		return graphql.Null
 	}
 	return ec._Question(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOQuestionOption2ᚕᚖmultiᚑchoiceᚋappᚋmodelsᚐQuestionOption(ctx context.Context, sel ast.SelectionSet, v []*models.QuestionOption) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOQuestionOption2ᚖmultiᚑchoiceᚋappᚋmodelsᚐQuestionOption(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+	return ret
+}
+
+func (ec *executionContext) marshalOQuestionOption2ᚖmultiᚑchoiceᚋappᚋmodelsᚐQuestionOption(ctx context.Context, sel ast.SelectionSet, v *models.QuestionOption) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._QuestionOption(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOQuestionResponse2ᚖmultiᚑchoiceᚋappᚋmodelsᚐQuestionResponse(ctx context.Context, sel ast.SelectionSet, v *models.QuestionResponse) graphql.Marshaler {

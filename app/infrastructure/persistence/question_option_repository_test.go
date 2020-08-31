@@ -70,7 +70,7 @@ func TestGetQuestionOptionByID_Success(t *testing.T) {
 
 	repo := persistence.NewQuestionOption(conn)
 
-	q, saveErr := repo.GetByID(quesOpt.ID)
+	q, saveErr := repo.GetQuestionOptionByID(quesOpt.ID)
 
 	assert.Nil(t, saveErr)
 	assert.EqualValues(t, q.Title, quesOpt.Title)
@@ -86,7 +86,7 @@ func TestGetAllQuestionOption_Success(t *testing.T) {
 		t.Fatalf("want non error, got %#v", err)
 	}
 	repo := persistence.NewQuestion(conn)
-	quesOpts, getErr := repo.GetAllQuestion()
+	quesOpts, getErr := repo.GetAllQuestions()
 
 	assert.Nil(t, getErr)
 	assert.EqualValues(t, len(quesOpts), 2)

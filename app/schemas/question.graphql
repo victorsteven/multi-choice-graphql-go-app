@@ -1,6 +1,7 @@
 type Question {
     id: ID!
     title: String!
+    questionOption: [QuestionOption]
 #    createdAt: Time!
 #    updatedAt: Time!
 }

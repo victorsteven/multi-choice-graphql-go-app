@@ -13,7 +13,6 @@ import (
 type Resolver struct {
 	AnsService            answer.AnsService
 	QuestionService       question.QuesService
-	//QuestionService       mock.QuesService
 	QuestionOptionService question_option.OptService
 }
 

@@ -17,8 +17,9 @@ type AnswerResponse struct {
 }
 
 type Question struct {
-	ID    string `json:"id" db:"id"`
-	Title string `json:"title" gorm:"unique" db:"title"`
+	ID             string            `json:"id" db:"id"`
+	Title          string            `json:"title" gorm:"unique" db:"title"`
+	QuestionOption []*QuestionOption `json:"questionOption" db:"questionOption"`
 }
 
 type QuestionInput struct {

@@ -13,7 +13,7 @@ var (
 	UpdateQuestionFn func(*models.Question) (*models.Question, error)
 	DeleteQuestionFn func(string) error
 	GetQuestionByIDFn func(string) (*models.Question, error)
-	GetAllQuestionFn func() ([]*models.Question, error)
+	GetAllQuestionsFn func() ([]*models.Question, error)
 )
 
 func (q *fakeQuestionService) CreateQuestion(question *models.Question) (*models.Question, error) {
@@ -32,8 +32,8 @@ func (q *fakeQuestionService) GetQuestionByID(id string) (*models.Question, erro
 	return GetQuestionByIDFn(id)
 }
 
-func (q *fakeQuestionService) GetAllQuestion() ([]*models.Question, error) {
-	return GetAllQuestionFn()
+func (q *fakeQuestionService) GetAllQuestions() ([]*models.Question, error) {
+	return GetAllQuestionsFn()
 }
 
 ////////////////////////////////////////
@@ -42,9 +42,9 @@ var (
 	CreateQuestionOptionFn func(option *models.QuestionOption) (*models.QuestionOption, error)
 	UpdateQuestionOptionFn func(option *models.QuestionOption) (*models.QuestionOption, error)
 	DeleteQuestionOptionFn func(string) error
-	DeleteByQuestionIDFn func(questionId string) error
+	DeleteQuestionOptionByQuestionIDFn func(questionId string) error
 	GetQuestionOptionByIDFn func(string) (*models.QuestionOption, error)
-	GetByQuestionID func(questionId string) ([]*models.QuestionOption, error)
+	GetQuestionOptionByQuestionID func(questionId string) ([]*models.QuestionOption, error)
 )
 
 func (o *fakeQuestionOptionService) CreateQuestionOption(option *models.QuestionOption) (*models.QuestionOption, error) {
@@ -63,12 +63,12 @@ func (o *fakeQuestionOptionService) DeleteQuestionOption(id string) error {
 	return DeleteQuestionOptionFn(id)
 }
 
-func (o *fakeQuestionOptionService) DeleteByQuestionID(questionId string) error {
-	return DeleteByQuestionIDFn(questionId)
+func (o *fakeQuestionOptionService) DeleteQuestionOptionByQuestionID(questionId string) error {
+	return DeleteQuestionOptionByQuestionIDFn(questionId)
 }
 
-func (o *fakeQuestionOptionService) GetByQuestionID(questionId string) ([]*models.QuestionOption, error) {
-	return GetByQuestionID(questionId)
+func (o *fakeQuestionOptionService) GetQuestionOptionByQuestionID(questionId string) ([]*models.QuestionOption, error) {
+	return GetQuestionOptionByQuestionID(questionId)
 }
 
 
@@ -82,23 +82,23 @@ var (
 	GetAllQuestionAnswersFn func(questionId string) ([]*models.Answer, error)
 )
 
-func (o *fakeQuestionOptionService) CreateAnswer(answer *models.Answer) (*models.Answer, error){
+func (a *fakeAnswerService) CreateAnswer(answer *models.Answer) (*models.Answer, error){
 	return CreateAnswerFn(answer)
 }
 
-func (o *fakeQuestionOptionService) UpdateAnswer(answer *models.Answer) (*models.Answer, error) {
+func (a *fakeAnswerService) UpdateAnswer(answer *models.Answer) (*models.Answer, error) {
 	return UpdateAnswerFn(answer)
 }
 
-func (o *fakeQuestionOptionService) DeleteAnswer(id string) error {
+func (a *fakeAnswerService) DeleteAnswer(id string) error {
 	return DeleteAnswerFn(id)
 }
 
-func (o *fakeQuestionOptionService) GetAnswerByID(id string) (*models.Answer, error) {
+func (a *fakeAnswerService) GetAnswerByID(id string) (*models.Answer, error) {
 	return GetAnswerByIDFn(id)
 }
 
-func (o *fakeQuestionOptionService) GetAllQuestionAnswers(questionId string) ([]*models.Answer, error) {
+func (a *fakeAnswerService) GetAllQuestionAnswers(questionId string) ([]*models.Answer, error) {
 	return GetAllQuestionAnswersFn(questionId)
 }
 

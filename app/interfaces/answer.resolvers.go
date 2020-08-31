@@ -12,6 +12,7 @@ import (
 )
 
 func (r *mutationResolver) CreateAnswer(ctx context.Context, questionID string, optionID string) (*models.AnswerResponse, error) {
+
 	ans := &models.Answer{
 		QuestionID: questionID,
 		OptionID:   optionID,
@@ -101,7 +102,7 @@ func (r *mutationResolver) UpdateAnswer(ctx context.Context, id string, question
 
 	return &models.AnswerResponse{
 		Message: "Successfully updated answer",
-		Status:  http.StatusCreated,
+		Status:  http.StatusOK,
 		Data:    answer,
 	}, nil
 }
@@ -149,7 +150,7 @@ func (r *queryResolver) GetAllQuestionAnswers(ctx context.Context, questionID st
 	}
 
 	return &models.AnswerResponse{
-		Message:  "Successfully retrieved all questions",
+		Message:  "Successfully retrieved all answers",
 		Status:   http.StatusOK,
 		DataList: answers,
 	}, nil

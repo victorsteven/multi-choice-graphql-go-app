@@ -42,6 +42,6 @@ func (q *QuesService) GetByID(id string) (*models.Question, error) {
 	return q.GetByIDFn(id)
 }
 
-func (q *QuesService) GetAllQuestion() ([]*models.Question, error) {
+func (q *QuesService) GetAllQuestions() ([]*models.Question, error) {
 	return q.GetAllQuestionsFn()
 }

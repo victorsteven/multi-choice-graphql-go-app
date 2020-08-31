@@ -23,7 +23,7 @@ var _ question_option.OptService = &optService{}
 func (s *optService) CreateQuestionOption(questOpt *models.QuestionOption) (*models.QuestionOption, error) {
 
 	//check if this question option title or the position or the correctness already exist for the question
-	oldOpts, _ := s.GetByQuestionID(questOpt.QuestionID)
+	oldOpts, _ := s.GetQuestionOptionByQuestionID(questOpt.QuestionID)
 	if len(oldOpts) > 0 {
 		for _, v := range oldOpts {
 			if v.Title == questOpt.Title || v.Position == questOpt.Position || (v.IsCorrect == true && questOpt.IsCorrect == true) {
@@ -61,7 +61,7 @@ func (s *optService) DeleteQuestionOption(id string) error {
 	return nil
 }
 
-func (s *optService) DeleteByQuestionID(questId string) error {
+func (s *optService) DeleteQuestionOptionByQuestionID(questId string) error {
 
 	err := s.db.Delete(questId).Error
 	if err != nil {
@@ -84,7 +84,7 @@ func (s *optService) GetQuestionOptionByID(id string) (*models.QuestionOption, e
 
 }
 
-func (s *optService) GetByQuestionID(id string) ([]*models.QuestionOption, error) {
+func (s *optService) GetQuestionOptionByQuestionID(id string) ([]*models.QuestionOption, error) {
 
 	var quesOpts []*models.QuestionOption
 

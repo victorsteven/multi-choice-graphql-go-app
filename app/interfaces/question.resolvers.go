@@ -99,7 +99,7 @@ func (r *mutationResolver) UpdateQuestion(ctx context.Context, id string, questi
 	}
 
 	//For the options, we will discard the previous options and insert new ones:
-	err = r.QuestionOptionService.DeleteByQuestionID(quest.ID)
+	err = r.QuestionOptionService.DeleteQuestionOptionByQuestionID(quest.ID)
 	if err != nil {
 		return &models.QuestionResponse{
 			Message: "Error Deleting question options",
@@ -140,7 +140,6 @@ func (r *mutationResolver) UpdateQuestion(ctx context.Context, id string, questi
 }
 
 func (r *mutationResolver) DeleteQuestion(ctx context.Context, id string) (*models.QuestionResponse, error) {
-
 	err := r.QuestionService.DeleteQuestion(id)
 	if err != nil {
 		return &models.QuestionResponse{
@@ -150,7 +149,7 @@ func (r *mutationResolver) DeleteQuestion(ctx context.Context, id string) (*mode
 	}
 
 	//also delete the options created too:
-	err = r.QuestionOptionService.DeleteByQuestionID(id)
+	err = r.QuestionOptionService.DeleteQuestionOptionByQuestionID(id)
 	if err != nil {
 		return &models.QuestionResponse{
 			Message: "Error Deleting question options",
@@ -182,7 +181,8 @@ func (r *queryResolver) GetOneQuestion(ctx context.Context, id string) (*models.
 }
 
 func (r *queryResolver) GetAllQuestions(ctx context.Context) (*models.QuestionResponse, error) {
-	questions, err := r.QuestionService.GetAllQuestion()
+
+	questions, err := r.QuestionService.GetAllQuestions()
 	if err != nil {
 		log.Println("getting all questions error: ", err)
 		return &models.QuestionResponse{
