@@ -21,8 +21,6 @@ func DBConn() (*gorm.DB, error) {
 			fmt.Println("we have the env")
 		}
 		return LocalDatabase()
-	} else {
-		fmt.Println("nothing here")
 	}
 	return CIBuild()
 }
