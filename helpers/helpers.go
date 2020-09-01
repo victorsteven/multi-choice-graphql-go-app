@@ -6,15 +6,6 @@ import (
 	"strings"
 )
 
-type Paging struct {
-	Page      int    `json:"page"`
-	Total     int    `json:"total"`
-	Limit     int    `json:"limit"`
-	Offset    int    `json:"offset"`
-	Order     string `json:"order"`
-	Direction string `json:"direction"`
-	Search    string `json:"search"`
-}
 
 // ValidateInputs validates the inputs
 func ValidateInputs(dataSet interface{}) (bool, string) {
@@ -33,7 +24,6 @@ func ValidateInputs(dataSet interface{}) (bool, string) {
 		}
 
 		//Validation errors occurred
-		//errors := make(map[string]string)
 		var errString string
 
 		reflected := reflect.ValueOf(dataSet)

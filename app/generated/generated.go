@@ -7,7 +7,6 @@ import (
 	"context"
 	"errors"
 	"multi-choice/app/models"
-	"multi-choice/custom_types"
 	"strconv"
 	"sync"
 	"time"
@@ -516,9 +515,11 @@ extend type Query {
 type AnswerResponse {
     message: String!
     status: Int!
-    data: Answer
-    dataList: [Answer]
-}`, BuiltIn: false},
+    data: Answer  #For single record
+    dataList: [Answer] # For array of records.
+}
+
+`, BuiltIn: false},
 	{Name: "app/schemas/question.graphql", Input: `type Question {
     id: ID!
     title: String!
@@ -567,9 +568,7 @@ input QuestionOptionInput {
 }
 
 `, BuiltIn: false},
-	{Name: "app/schemas/schema.graphql", Input: `# GraphQL schema example
-#
-# https://gqlgen.com/getting-started/
+	{Name: "app/schemas/schema.graphql", Input: `# Custom schema
 
 scalar Time
 
@@ -3918,12 +3917,12 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 }
 
 func (ec *executionContext) unmarshalNTime2timeᚐTime(ctx context.Context, v interface{}) (time.Time, error) {
-	res, err := custom_types.UnmarshalTime(v)
+	res, err := graphql.UnmarshalTime(v)
 	return res, graphql.WrapErrorWithInputPath(ctx, err)
 }
 
 func (ec *executionContext) marshalNTime2timeᚐTime(ctx context.Context, sel ast.SelectionSet, v time.Time) graphql.Marshaler {
-	res := custom_types.MarshalTime(v)
+	res := graphql.MarshalTime(v)
 	if res == graphql.Null {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")

@@ -11,3 +11,4 @@ type AnsService interface {
 	GetAnswerByID(id string) (*models.Answer, error)
 	GetAllQuestionAnswers(questionId string) ([]*models.Answer, error)
 }
+

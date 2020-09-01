@@ -41,8 +41,6 @@ func main() {
 		port = defaultPort
 	}
 
-	//appAddr := ":" + os.Getenv("PORT")
-
 	dbConn := fmt.Sprintf("host=%s port=%s user=%s dbname=%s sslmode=disable password=%s", databaseHost, databasePort, databaseUser, databaseName, databasePassword)
 
 	conn := db.OpenDB(dbConn)

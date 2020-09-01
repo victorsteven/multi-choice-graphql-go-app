@@ -12,3 +12,4 @@ type OptService interface {
 	GetQuestionOptionByID(id string) (*models.QuestionOption, error)
 	GetQuestionOptionByQuestionID(questionId string) ([]*models.QuestionOption, error)
 }
+
