@@ -21,6 +21,7 @@ extend type Query {
 type AnswerResponse {
     message: String!
     status: Int!
-    data: Answer
-    dataList: [Answer]
+    data: Answer  #For single record
+    dataList: [Answer] # For array of records.
 }
+
